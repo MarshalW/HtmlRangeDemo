@@ -119,17 +119,20 @@
 
         });
 
-        $(document).on('selectionchange',function(){
-            console.log('selection change');
-            var selection=window.getSelection();
-            if(selection.rangeCount>0){
-                var range = window.getSelection().getRangeAt(0);
-                console.log(range.toString());
-            }
-        });
+        var selectNode;
 
-        $(document).on('selectstart',function(){
-            console.log('selection start');
+        $(document).on('selectionchange',function(event){
+            var selection=window.getSelection();
+            console.log('range type: '+selection.type);
+            if(selection.type=='Range'){
+                var range = window.getSelection().getRangeAt(0);
+                var baseNode=selection.baseNode;
+                console.log('base node? '+baseNode.data);
+                var fragment=range.extractContents();
+                var node = document.createElement('span');
+                node.appendChild(fragment);
+                baseNode.parentNode.insertAdjacentElement('afterEnd',node);
+            }
         });
     });
 
